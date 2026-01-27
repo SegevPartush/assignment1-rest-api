@@ -1,0 +1,137 @@
+### Variables
+@baseUrl = http://localhost:3000
+@postId = 
+@commentId = 
+
+### ============================================
+### HEALTH CHECK
+### ============================================
+
+### Health Check
+GET {{baseUrl}}/health
+
+### ============================================
+### POSTS API
+### ============================================
+
+### Get All Posts
+GET {{baseUrl}}/api/posts
+
+### Get Post By ID
+GET {{baseUrl}}/api/posts/{{postId}}
+
+### Create New Post
+POST {{baseUrl}}/api/posts
+Content-Type: application/json
+
+{
+  "title": "My First Post",
+  "content": "This is the content of my first post",
+  "author": "John Doe"
+}
+
+### Update Post
+PUT {{baseUrl}}/api/posts/{{postId}}
+Content-Type: application/json
+
+{
+  "title": "Updated Post Title",
+  "content": "Updated content here",
+  "author": "John Doe"
+}
+
+### Delete Post
+DELETE {{baseUrl}}/api/posts/{{postId}}
+
+### ============================================
+### COMMENTS API
+### ============================================
+
+### Get All Comments
+GET {{baseUrl}}/api/comments
+
+### Get Comment By ID
+GET {{baseUrl}}/api/comments/{{commentId}}
+
+### Get Comments By Post ID
+GET {{baseUrl}}/api/comments/post/{{postId}}
+
+### Create New Comment
+POST {{baseUrl}}/api/comments
+Content-Type: application/json
+
+{
+  "content": "This is a great post!",
+  "author": "Jane Doe",
+  "postId": "{{postId}}"
+}
+
+### Update Comment
+PUT {{baseUrl}}/api/comments/{{commentId}}
+Content-Type: application/json
+
+{
+  "content": "Updated comment content",
+  "author": "Jane Doe"
+}
+
+### Delete Comment
+DELETE {{baseUrl}}/api/comments/{{commentId}}
+
+### ============================================
+### TESTING FLOW (Run in order)
+### ============================================
+
+### Step 1: Health Check
+GET {{baseUrl}}/health
+
+### Step 2: Create Post
+POST {{baseUrl}}/api/posts
+Content-Type: application/json
+
+{
+  "title": "Test Post",
+  "content": "This is a test post for API testing",
+  "author": "Test User"
+}
+
+### Step 3: Get All Posts (Copy the _id from response)
+GET {{baseUrl}}/api/posts
+
+### Step 4: Create Comment (Replace {{postId}} with actual ID from Step 3)
+POST {{baseUrl}}/api/comments
+Content-Type: application/json
+
+{
+  "content": "This is a test comment",
+  "author": "Comment Author",
+  "postId": "REPLACE_WITH_POST_ID"
+}
+
+### Step 5: Get Comments by Post ID
+GET {{baseUrl}}/api/comments/post/REPLACE_WITH_POST_ID
+
+### Step 6: Update Post
+PUT {{baseUrl}}/api/posts/REPLACE_WITH_POST_ID
+Content-Type: application/json
+
+{
+  "title": "Updated Test Post",
+  "content": "Updated content",
+  "author": "Test User"
+}
+
+### Step 7: Update Comment
+PUT {{baseUrl}}/api/comments/REPLACE_WITH_COMMENT_ID
+Content-Type: application/json
+
+{
+  "content": "Updated comment",
+  "author": "Comment Author"
+}
+
+### Step 8: Delete Comment
+DELETE {{baseUrl}}/api/comments/REPLACE_WITH_COMMENT_ID
+
+### Step 9: Delete Post
+DELETE {{baseUrl}}/api/posts/REPLACE_WITH_POST_ID
