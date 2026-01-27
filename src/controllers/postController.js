@@ -24,6 +24,9 @@ const getPostById = async (req, res) => {
 const createPost = async (req, res) => {
   try {
     const { title, content, author } = req.body;
+    if (!title || !content || !author) {
+      return res.status(400).json({ error: 'Title, content, and author are required' });
+    }
     const post = new Post({ title, content, author });
     await post.save();
     res.status(201).json(post);
