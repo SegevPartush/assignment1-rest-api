@@ -3,6 +3,13 @@
 @postId = 
 @commentId = 
 
+### HOW TO USE:
+### 1. Run Step 1 (Health Check)
+### 2. Run Step 2 (Create Post) - The @postId will be set automatically!
+### 3. Run Step 3 (Get All Posts) - Optional
+### 4. Run Step 4 (Create Comment) - The @commentId will be set automatically!
+### 5. Now run Steps 5-9 in order - Everything will work automatically!
+
 ### ============================================
 ### HEALTH CHECK
 ### ============================================
@@ -27,7 +34,7 @@ Content-Type: application/json
 {
   "title": "My First Post",
   "content": "This is the content of my first post",
-  "author": "John Doe"
+  "author": "Segev Partush"
 }
 
 ### Update Post
@@ -37,7 +44,7 @@ Content-Type: application/json
 {
   "title": "Updated Post Title",
   "content": "Updated content here",
-  "author": "John Doe"
+  "author": "Segev The King"
 }
 
 ### Delete Post
@@ -62,7 +69,7 @@ Content-Type: application/json
 
 {
   "content": "This is a great post!",
-  "author": "Jane Doe",
+  "author": "Segev Partush",
   "postId": "{{postId}}"
 }
 
@@ -72,7 +79,7 @@ Content-Type: application/json
 
 {
   "content": "Updated comment content",
-  "author": "Jane Doe"
+  "author": "Segev Partush"
 }
 
 ### Delete Comment
@@ -86,6 +93,7 @@ DELETE {{baseUrl}}/api/comments/{{commentId}}
 GET {{baseUrl}}/health
 
 ### Step 2: Create Post
+# @name createPost
 POST {{baseUrl}}/api/posts
 Content-Type: application/json
 
@@ -95,24 +103,31 @@ Content-Type: application/json
   "author": "Test User"
 }
 
-### Step 3: Get All Posts (Copy the _id from response)
+### Extract Post ID from response (automatic!)
+@postId = {{createPost.response.body._id}}
+
+### Step 3: Get All Posts
 GET {{baseUrl}}/api/posts
 
-### Step 4: Create Comment (Replace {{postId}} with actual ID from Step 3)
+### Step 4: Create Comment
+# @name createComment
 POST {{baseUrl}}/api/comments
 Content-Type: application/json
 
 {
   "content": "This is a test comment",
   "author": "Comment Author",
-  "postId": "REPLACE_WITH_POST_ID"
+  "postId": "{{postId}}"
 }
 
+### Extract Comment ID from response (automatic!)
+@commentId = {{createComment.response.body._id}}
+
 ### Step 5: Get Comments by Post ID
-GET {{baseUrl}}/api/comments/post/REPLACE_WITH_POST_ID
+GET {{baseUrl}}/api/comments/post/{{postId}}
 
 ### Step 6: Update Post
-PUT {{baseUrl}}/api/posts/REPLACE_WITH_POST_ID
+PUT {{baseUrl}}/api/posts/{{postId}}
 Content-Type: application/json
 
 {
@@ -122,7 +137,7 @@ Content-Type: application/json
 }
 
 ### Step 7: Update Comment
-PUT {{baseUrl}}/api/comments/REPLACE_WITH_COMMENT_ID
+PUT {{baseUrl}}/api/comments/{{commentId}}
 Content-Type: application/json
 
 {
@@ -131,7 +146,7 @@ Content-Type: application/json
 }
 
 ### Step 8: Delete Comment
-DELETE {{baseUrl}}/api/comments/REPLACE_WITH_COMMENT_ID
+DELETE {{baseUrl}}/api/comments/{{commentId}}
 
 ### Step 9: Delete Post
-DELETE {{baseUrl}}/api/posts/REPLACE_WITH_POST_ID
+DELETE {{baseUrl}}/api/posts/{{postId}}

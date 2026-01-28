@@ -18,6 +18,9 @@ const getCommentById = async (req, res) => {
     }
     res.json(comment);
   } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid comment ID' });
+    }
     res.status(500).json({ error: error.message });
   }
 };
@@ -27,6 +30,9 @@ const getCommentsByPostId = async (req, res) => {
     const comments = await Comment.find({ postId: req.params.postId });
     res.json(comments);
   } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
     res.status(500).json({ error: error.message });
   }
 };
@@ -34,6 +40,9 @@ const getCommentsByPostId = async (req, res) => {
 const createComment = async (req, res) => {
   try {
     const { content, author, postId } = req.body;
+    if (!content || !author || !postId) {
+      return res.status(400).json({ error: 'Content, author, and postId are required' });
+    }
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
@@ -42,18 +51,43 @@ const createComment = async (req, res) => {
     await comment.save();
     res.status(201).json(comment);
   } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid post ID' });
+    }
     res.status(500).json({ error: error.message });
   }
 };
 
 const updateComment = async (req, res) => {
   try {
-    const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { content, author, postId } = req.body;
+    
+    if (content !== undefined && !content.trim()) {
+      return res.status(400).json({ error: 'Content cannot be empty' });
+    }
+    if (author !== undefined && !author.trim()) {
+      return res.status(400).json({ error: 'Author cannot be empty' });
+    }
+    
+    if (postId !== undefined) {
+      const post = await Post.findById(postId);
+      if (!post) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+    }
+    
+    const comment = await Comment.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
     if (!comment) {
       return res.status(404).json({ error: 'Comment not found' });
     }
     res.json(comment);
   } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid comment ID or post ID' });
+    }
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: error.message });
   }
 };
@@ -66,6 +100,9 @@ const deleteComment = async (req, res) => {
     }
     res.json({ message: 'Comment deleted' });
   } catch (error) {
+    if (error.name === 'CastError') {
+      return res.status(400).json({ error: 'Invalid comment ID' });
+    }
     res.status(500).json({ error: error.message });
   }
 };
