@@ -1,99 +1,24 @@
 ### Variables
 @baseUrl = http://localhost:3000
 @postId = 
-@commentId = 
+@commentId =
 
-### HOW TO USE:
-### 1. Run Step 1 (Health Check)
-### 2. Run Step 2 (Create Post) - The @postId will be set automatically!
-### 3. Run Step 3 (Get All Posts) - Optional
-### 4. Run Step 4 (Create Comment) - The @commentId will be set automatically!
-### 5. Now run Steps 5-9 in order - Everything will work automatically!
-
+### Instructions:
+### After Step 2: Set @postId above
+### After Step 7: Set @commentId above
+###
 ### ============================================
 ### HEALTH CHECK
 ### ============================================
 
-### Health Check
+### Step 1: Health Check
 GET {{baseUrl}}/health
 
 ### ============================================
 ### POSTS API
 ### ============================================
 
-### Get All Posts
-GET {{baseUrl}}/api/posts
-
-### Get Post By ID
-GET {{baseUrl}}/api/posts/{{postId}}
-
-### Create New Post
-POST {{baseUrl}}/api/posts
-Content-Type: application/json
-
-{
-  "title": "My First Post",
-  "content": "This is the content of my first post",
-  "author": "Segev Partush"
-}
-
-### Update Post
-PUT {{baseUrl}}/api/posts/{{postId}}
-Content-Type: application/json
-
-{
-  "title": "Updated Post Title",
-  "content": "Updated content here",
-  "author": "Segev The King"
-}
-
-### Delete Post
-DELETE {{baseUrl}}/api/posts/{{postId}}
-
-### ============================================
-### COMMENTS API
-### ============================================
-
-### Get All Comments
-GET {{baseUrl}}/api/comments
-
-### Get Comment By ID
-GET {{baseUrl}}/api/comments/{{commentId}}
-
-### Get Comments By Post ID
-GET {{baseUrl}}/api/comments/post/{{postId}}
-
-### Create New Comment
-POST {{baseUrl}}/api/comments
-Content-Type: application/json
-
-{
-  "content": "This is a great post!",
-  "author": "Segev Partush",
-  "postId": "{{postId}}"
-}
-
-### Update Comment
-PUT {{baseUrl}}/api/comments/{{commentId}}
-Content-Type: application/json
-
-{
-  "content": "Updated comment content",
-  "author": "Segev Partush"
-}
-
-### Delete Comment
-DELETE {{baseUrl}}/api/comments/{{commentId}}
-
-### ============================================
-### TESTING FLOW (Run in order)
-### ============================================
-
-### Step 1: Health Check
-GET {{baseUrl}}/health
-
 ### Step 2: Create Post
-# @name createPost
 POST {{baseUrl}}/api/posts
 Content-Type: application/json
 
@@ -103,30 +28,13 @@ Content-Type: application/json
   "author": "Test User"
 }
 
-### Extract Post ID from response (automatic!)
-@postId = {{createPost.response.body._id}}
-
 ### Step 3: Get All Posts
 GET {{baseUrl}}/api/posts
 
-### Step 4: Create Comment
-# @name createComment
-POST {{baseUrl}}/api/comments
-Content-Type: application/json
+### Step 4: Get Post By ID
+GET {{baseUrl}}/api/posts/{{postId}}
 
-{
-  "content": "This is a test comment",
-  "author": "Comment Author",
-  "postId": "{{postId}}"
-}
-
-### Extract Comment ID from response (automatic!)
-@commentId = {{createComment.response.body._id}}
-
-### Step 5: Get Comments by Post ID
-GET {{baseUrl}}/api/comments/post/{{postId}}
-
-### Step 6: Update Post
+### Step 5: Update Post
 PUT {{baseUrl}}/api/posts/{{postId}}
 Content-Type: application/json
 
@@ -136,7 +44,33 @@ Content-Type: application/json
   "author": "Test User"
 }
 
-### Step 7: Update Comment
+### Step 6: Delete Post
+DELETE {{baseUrl}}/api/posts/{{postId}}
+
+### ============================================
+### COMMENTS API
+### ============================================
+
+### Step 7: Create Comment
+POST {{baseUrl}}/api/comments
+Content-Type: application/json
+
+{
+  "content": "This is a test comment",
+  "author": "Comment Author",
+  "postId": "{{postId}}"
+}
+
+### Step 8: Get All Comments
+GET {{baseUrl}}/api/comments
+
+### Step 9: Get Comment By ID
+GET {{baseUrl}}/api/comments/{{commentId}}
+
+### Step 10: Get Comments By Post ID
+GET {{baseUrl}}/api/comments/post/{{postId}}
+
+### Step 11: Update Comment
 PUT {{baseUrl}}/api/comments/{{commentId}}
 Content-Type: application/json
 
@@ -145,8 +79,6 @@ Content-Type: application/json
   "author": "Comment Author"
 }
 
-### Step 8: Delete Comment
+### Step 12: Delete Comment
 DELETE {{baseUrl}}/api/comments/{{commentId}}
 
-### Step 9: Delete Post
-DELETE {{baseUrl}}/api/posts/{{postId}}
