@@ -1,7 +1,7 @@
 ### Variables
 @baseUrl = http://localhost:3000
-@postId = 
-@commentId =
+@postId = 6979ffa8757d79079820415d
+@commentId = 6979ffc9757d790798204163
 
 ### Instructions:
 ### After Step 2: Set @postId above
@@ -25,7 +25,7 @@ Content-Type: application/json
 {
   "title": "Test Post",
   "content": "This is a test post for API testing",
-  "author": "Test User"
+  "sender": "Test User"
 }
 
 ### Step 3: Get All Posts
@@ -34,6 +34,9 @@ GET {{baseUrl}}/api/posts
 ### Step 4: Get Post By ID
 GET {{baseUrl}}/api/posts/{{postId}}
 
+### Step 4b: Get Posts by Sender
+GET {{baseUrl}}/api/posts?sender=Test User
+
 ### Step 5: Update Post
 PUT {{baseUrl}}/api/posts/{{postId}}
 Content-Type: application/json
@@ -41,7 +44,7 @@ Content-Type: application/json
 {
   "title": "Updated Test Post",
   "content": "Updated content",
-  "author": "Test User"
+  "sender": "Test User"
 }
 
 ### Step 6: Delete Post
@@ -57,7 +60,7 @@ Content-Type: application/json
 
 {
   "content": "This is a test comment",
-  "author": "Comment Author",
+  "sender": "Comment Author",
   "postId": "{{postId}}"
 }
 
@@ -76,7 +79,7 @@ Content-Type: application/json
 
 {
   "content": "Updated comment",
-  "author": "Comment Author"
+  "sender": "Comment Author"
 }
 
 ### Step 12: Delete Comment

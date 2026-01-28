@@ -39,20 +39,27 @@ const getCommentsByPostId = async (req, res) => {
 
 const createComment = async (req, res) => {
   try {
-    const { content, author, postId } = req.body;
-    if (!content || !author || !postId) {
-      return res.status(400).json({ error: 'Content, author, and postId are required' });
+    const { content, sender, postId } = req.body;
+    
+    if (!content || !sender || !postId) {
+      return res.status(400).json({ error: 'Content, sender, and postId are required' });
     }
+    
+    if (typeof postId === 'string' && postId.trim() === '') {
+      return res.status(400).json({ error: 'Post ID cannot be empty' });
+    }
+    
     const post = await Post.findById(postId);
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
-    const comment = new Comment({ content, author, postId });
+    
+    const comment = new Comment({ content, sender, postId });
     await comment.save();
     res.status(201).json(comment);
   } catch (error) {
     if (error.name === 'CastError') {
-      return res.status(400).json({ error: 'Invalid post ID' });
+      return res.status(400).json({ error: 'Invalid post ID format' });
     }
     res.status(500).json({ error: error.message });
   }
@@ -60,13 +67,13 @@ const createComment = async (req, res) => {
 
 const updateComment = async (req, res) => {
   try {
-    const { content, author, postId } = req.body;
+    const { content, sender, postId } = req.body;
     
     if (content !== undefined && !content.trim()) {
       return res.status(400).json({ error: 'Content cannot be empty' });
     }
-    if (author !== undefined && !author.trim()) {
-      return res.status(400).json({ error: 'Author cannot be empty' });
+    if (sender !== undefined && !sender.trim()) {
+      return res.status(400).json({ error: 'Sender cannot be empty' });
     }
     
     if (postId !== undefined) {
